@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+    <style>
+
+      /* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Center the form */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Style the container */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+/* Headings */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Input fields */
+input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Input field focus state */
+input[type="email"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Labels */
+p {
+    font-size: 16px;
+    margin: 0;
+    color: #333;
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Button focus state */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+    </style>
+</head>
+<body>
+  <form id="form">
+      <h1>Login</h1>
+
+      <p>Enter Email</p>
+      <input type="email" id = "email" placeholder="Email" >
+
+      <p>Enter Password</p>
+      <input type="password" id ="password" placeholder="Password" >
+
+      <!-- Login Button -->
+      <button type="submit">Login</button>
+  </form>
+</body>
+
+
+
+<script>
+
+
+document.getElementById("form").addEventListener("submit",function(event){
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  console.log(email);
+
+  const password = document.getElementById("password").value;
+
+  console.log(password);
+
+  
+  console.log("email");
+   
+   axios.post('https://reqres.in/api/login',{
+
+    "email": email,
+    "password": password
+
+   })
+   .then(function(response){
+   let token =response.data.token;
+
+  localStorage.setItem("token",token);
+    console.log("token recieved",token);
+
+    //redirect if success
+    window.location.href = "loginSuccess.html";
+
+   })
+   .catch(error=>{
+    console.error(error);
+    alert(error.response.data.error);
+   }
+    
+   );
+
+
+});
+
+
+
+
+   function createNewUser(){
+    let token = localStorage.getItem("token");
+    let config ={
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+
+      axios.post('https://reqres.in/api/users',{
+
+      "name": "Abdallah",
+      "job": "Software Developer"
+
+      },config)
+      .then(function(response){
+
+        console.log(response);
+      })
+      .catch(function(error){
+      console.log(error);
+      });
+
+   }
+
+
+</script>
+</html>
